@@ -12,25 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Global access. Not persistent across scenes. Removes duplicates. Does not get created automatically.
-/// </summary>
-public class Singleton<T> : MonoBehaviour where T : Singleton<T>
+public class UIAudioEvent : MonoBehaviour
 {
-  public static T Instance { get; private set; }
-
-  protected virtual void Awake()
+  public enum AudioEvent
   {
-    Initialize();
+    ButtonPress,
   }
   
-  protected virtual void Initialize()
+  [SerializeField] AudioEvent audioEvent;
+  
+  // Invoked by Button component when pressed.
+  public void Pressed()
   {
-    if (Instance != null && Instance != this)
-      Destroy(gameObject);
-    else
-      Instance = this as T;
+    UIAudioSingleton.Instance.OnEvent(audioEvent);
   }
 }

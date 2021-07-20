@@ -12,25 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Global access. Not persistent across scenes. Removes duplicates. Does not get created automatically.
-/// </summary>
-public class Singleton<T> : MonoBehaviour where T : Singleton<T>
+public class MainMenu : Singleton<MainMenu>
 {
-  public static T Instance { get; private set; }
-
-  protected virtual void Awake()
+  void Start()
   {
-    Initialize();
+    UIMenuFade.Instance.FadeIn();
+  }
+
+  public void NewGame()
+  {
+    UIMenuFade.Instance.FadeOut(() =>
+    {
+      SceneManager.LoadScene("Overworld");  
+    });
   }
   
-  protected virtual void Initialize()
+  public void LoadGame()
   {
-    if (Instance != null && Instance != this)
-      Destroy(gameObject);
-    else
-      Instance = this as T;
+    
+  }
+  
+  public void JoinGame()
+  {
+    
+  }
+  
+  public void Settings()
+  {
+    
+  }
+  
+  public void Exit()
+  {
+#if UNITY_EDITOR
+    EditorApplication.isPlaying = false;
+    return;
+#else
+    Application.Quit();
+#endif
   }
 }

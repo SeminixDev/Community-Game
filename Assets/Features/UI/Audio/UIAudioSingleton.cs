@@ -12,25 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Global access. Not persistent across scenes. Removes duplicates. Does not get created automatically.
-/// </summary>
-public class Singleton<T> : MonoBehaviour where T : Singleton<T>
+public class UIAudioSingleton : Singleton<UIAudioSingleton>
 {
-  public static T Instance { get; private set; }
+  [SerializeField] AudioClip buttonPressedClip;
+  [SerializeField] AudioSource source;
 
-  protected virtual void Awake()
+  protected override void Awake()
   {
-    Initialize();
+    base.Awake();
+    source.playOnAwake = false;
   }
-  
-  protected virtual void Initialize()
+
+  public void OnEvent(UIAudioEvent.AudioEvent audioEvent)
   {
-    if (Instance != null && Instance != this)
-      Destroy(gameObject);
-    else
-      Instance = this as T;
+    switch (audioEvent)
+    {
+      case UIAudioEvent.AudioEvent.ButtonPress:
+        source.clip = buttonPressedClip;
+        source.Play();
+        break;
+    }
   }
 }

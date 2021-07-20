@@ -73,6 +73,9 @@ crashlytics-build.properties
 # Rider Ignore
 .idea/
 
+# Ignore asset backups
+backup/
+
 ### 3rd party assets that are in the Asset.manifest
 
 /Assets/Free UI build package
